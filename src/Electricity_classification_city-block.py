@@ -1,31 +1,44 @@
 from Validation_method import Validation_method
-from Classifier import Classifier
+from Classifier import KNN_classifier
 from Performance_measure import Performance_measure
 import config
 import copy
+import csv
 
 if __name__ == "__main__":
 
     # Dataset
     dataset_file_path = config.data_path
-    file = "08_uci_haberman_58_2_att_27_patt.csv"
+    file = "Electricity.csv"
     file_delimiter = ','
 
+    csv_file = open(dataset_file_path + file, newline='')
+    dataset = list(csv.reader(csv_file, delimiter = file_delimiter))
 
-    # Validation method
-    test_patterns_positions = (11, 12, 13, 14, 17, 18, 27)
-    validation_method = Validation_method(dataset_file_path + file, file_delimiter)
-    sets = validation_method.fixed_partition(test_patterns_positions)
-    training_set = sets[0]
-    test_set = sets[1]
+    count_patterns = len(dataset)
+
+    # Apply Leave One Out and KNN
+
+    classified_test_set = []
+
+    for i in range(count_patterns):
+    
+        # Validation method
+        validation_method = Validation_method(dataset_file_path + file, file_delimiter)
+        training_set, test_set = validation_method.leave_one_out(i)
 
 
-    # Algorithm
-    classifier_1NN = Classifier(copy.deepcopy(training_set), copy.deepcopy(test_set))
-    classified_test_set = classifier_1NN.algorithm_1NN("city_block")
+        # Algorithm
+        classifier_KNN = KNN_classifier(copy.deepcopy(training_set), copy.deepcopy(test_set))
+        classified_test_set.append(classifier_KNN.algorithm_KNN("city_block", 37))
+
+
+    for i in range(count_patterns):
+
+        classified_test_set[i] = classified_test_set[i][0]        
 
     # Performance measure
-    possitive_class = 2.0
+    possitive_class = 1.0
     performance_measure = Performance_measure(classified_test_set, possitive_class)
 
     print(performance_measure.confusion_matrix)

@@ -3,6 +3,7 @@ from Classifier import KNN_classifier
 from Performance_measure import Performance_measure
 import config
 import copy
+import csv
 
 if __name__ == "__main__":
 
@@ -11,17 +12,30 @@ if __name__ == "__main__":
     file = "5_Nutt.csv"
     file_delimiter = ','
 
+    csv_file = open(dataset_file_path + file, newline='')
+    dataset = list(csv.reader(csv_file, delimiter = file_delimiter))
 
-    # Validation method
-    validation_method = Validation_method(dataset_file_path + file, file_delimiter)
-    training_and_test_sets = validation_method.leave_one_out()
+    count_patterns = len(dataset)
 
-    print(training_and_test_sets)
+    # Apply Leave One Out and KNN
+
+    classified_test_set = []
+
+    for i in range(count_patterns):
+    
+        # Validation method
+        validation_method = Validation_method(dataset_file_path + file, file_delimiter)
+        training_set, test_set = validation_method.leave_one_out(i)
 
 
-    """# Algorithm
-    classifier_1NN = KNN_classifier(copy.deepcopy(training_set), copy.deepcopy(test_set))
-    classified_test_set = classifier_1NN.algorithm_KNN("euclidean")
+        # Algorithm
+        classifier_KNN = KNN_classifier(copy.deepcopy(training_set), copy.deepcopy(test_set))
+        classified_test_set.append(classifier_KNN.algorithm_KNN("euclidean", 27))
+
+
+    for i in range(count_patterns):
+
+        classified_test_set[i] = classified_test_set[i][0]        
 
     # Performance measure
     possitive_class = 0.0
@@ -35,4 +49,4 @@ if __name__ == "__main__":
     print("Precision = " + str(performance_measure.precision))
     print("Balanced Accuracy = " + str(performance_measure.balanced_accuracy))
     print("F1 score = " + str(performance_measure.f1_score))
-    print("MCC = " + str(performance_measure.mcc))"""
+    print("MCC = " + str(performance_measure.mcc))

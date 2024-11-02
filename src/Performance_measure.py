@@ -13,14 +13,14 @@ class Performance_measure():
 
         self.confusion_matrix = self.generate_confusion_matrix()
 
-        self.accuracy = self.calculate_accuracy()
-        self.error_rate = self.calculate_error_rate()
-        self.sensitivity = self.calculate_sensitivity()
-        self.specificity = self.calculate_specificity()
-        self.precision = self.calculate_precision()
-        self.balanced_accuracy = self.calculate_balanced_accuracy()
-        self.f1_score = self.calculate_f1_score()
-        self.mcc = self.calculate_MCC()
+        self.accuracy = round(self.calculate_accuracy(),4)
+        self.error_rate = round(self.calculate_error_rate(),4)
+        self.sensitivity = round(self.calculate_sensitivity(),4)
+        self.specificity = round(self.calculate_specificity(),4)
+        self.precision = round(self.calculate_precision(),4)
+        self.balanced_accuracy = round(self.calculate_balanced_accuracy(),4)
+        self.f1_score = round(self.calculate_f1_score(),4)
+        self.mcc = round(self.calculate_MCC(),4)
 
 
     def generate_confusion_matrix(self):

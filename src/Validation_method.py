@@ -106,29 +106,15 @@ class Validation_method():
 
 
         
-    def leave_one_out(self):
+    def leave_one_out(self, the_one):
 
-        pattern_count = len(self.dataset)
+        training_set = []
+        test_set = []
 
-        training_and_test_sets = []
+        test_set = [self.dataset.pop(the_one)]
+        training_set = self.dataset
 
-        for i in pattern_count:
-
-            temp_sets = []
-
-            for pattern in range(pattern_count):
-
-                if self.dataset[pattern] == self.dataset[i]:
-
-                    test_pattern = self.dataset[pattern]
-
-                temp_sets.append(pattern)
-
-            training_and_test_sets.append(test_pattern)
-
-            training_and_test_sets.append(temp_sets)
-
-        return training_and_test_sets
+        return [training_set, test_set]
 
                 
 
